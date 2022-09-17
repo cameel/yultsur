@@ -360,10 +360,16 @@ impl Block {
     }
 }
 
-pub fn parse_block(source: &str) -> Block {
-    let mut pairs = BlockParser::parse(Rule::block, &source).unwrap();
-    let mut next_identifier = 1u64;
-    Block::from(pairs.next().unwrap(), &mut next_identifier)
+pub fn parse_block(source: &str) -> Result<Block, String> {
+    match BlockParser::parse(Rule::block, &source) {
+        Ok(mut pairs) => {
+            let mut next_identifier = 1u64;
+            Ok(Block::from(pairs.next().unwrap(), &mut next_identifier))
+        }
+        Err(error) => {
+            Err(format!("{}", error))
+        }
+    }
 }
 
 #[cfg(test)]
@@ -434,7 +440,7 @@ mod tests {
 
     fn test_file(filename: &str) {
         let source = read_to_string(filename).unwrap();
-        let block = parse_block(&source);
+        let block = parse_block(&source).unwrap();
         assert_eq!(source, block.to_string());
     }
 }
