@@ -134,10 +134,13 @@ mod tests {
                     function: Identifier {
                         id: IdentifierID::UnresolvedReference,
                         name: "add".to_string(),
+                        location: None,
                     },
                     arguments: vec![],
+                    location: None,
                 },
             ))],
+            location: None,
         };
         resolve::<EVMDialect>(&mut ast);
     }
